@@ -30,6 +30,7 @@ test('Execute SQL Query', async () => {
     expect(result[0]).toEqual({ id: '1', name: 'John' });
 });
 
+describe('Parse SQL WHERE Clause', () => {
 test('Parse SQL Query with WHERE Clause', () => {
     const query = 'SELECT id, name FROM sample WHERE age = 25';
     const parsed = parseQuery(query);
@@ -42,6 +43,20 @@ test('Parse SQL Query with WHERE Clause', () => {
           value: "25",
         }],
     });
+});
+test('Invalid WHERE Clause (Missing Value)', () => {
+    const query = 'SELECT id, name FROM sample WHERE age =';
+    expect(() => parseQuery(query)).toThrow('Invalid condition format.');
+});
+
+test('Invalid WHERE Clause (Invalid Format)', () => {
+    const query = 'SELECT id, name FROM sample WHERE age = 25 AND';
+
+    
+    expect(() => parseQuery(query)).toThrow('Invalid condition format.');
+});
+
+
 });
 
 test('Execute SQL Query with WHERE Clause', async () => {
